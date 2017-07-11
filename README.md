@@ -3,7 +3,7 @@ Project One - Sensor/Geo
 Group Four
 Due Friday, July 7th
 
-#Group Members: 
+# Group Members: 
 Elsie Adu
 Sergio Andres
 Corey Della-Pietra
