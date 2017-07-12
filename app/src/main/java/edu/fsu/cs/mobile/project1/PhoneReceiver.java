@@ -20,6 +20,7 @@ public class PhoneReceiver extends BroadcastReceiver {
                     .setContentText("Put down your phone and keep studying!")
                     .setSmallIcon(android.R.drawable.ic_dialog_alert)
                     .setPriority(Notification.PRIORITY_HIGH)
+                    .setDefaults(Notification.DEFAULT_ALL)
                     .build();
             mNotificationManger.notify(NOTIFICATION_ID, notification);
         }
