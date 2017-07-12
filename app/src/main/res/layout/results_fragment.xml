@@ -3,15 +3,19 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/results"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="182dp"
-        android:text="RESULTS/DATA/STUFF HERE!"
+        android:text="YOU STUDIED FOR: 0:00:00"
         android:textAlignment="center"
         android:textColor="@android:color/holo_green_dark"
-        android:textSize="30sp"
+        android:textSize="40sp"
         android:textStyle="bold" />
+
+
+
+
 </RelativeLayout>

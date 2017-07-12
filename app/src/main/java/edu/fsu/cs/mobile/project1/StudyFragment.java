@@ -19,7 +19,8 @@ public class StudyFragment extends Fragment{
     TextView TIMER;
     long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L;
     Handler handler;
-    int seconds, Minutes, milliSeconds;
+    int Seconds, Minutes, milliSeconds;
+    public long Total;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,8 +44,19 @@ public class StudyFragment extends Fragment{
                     stopTimer();
 
 
+
                     getContext().stopService(intent);       //SERVICE STOPS RUNNING WHEN RESULTS NEED TO BE DISPLAYED
                     ResultsFragment fragment = new ResultsFragment();       //if studying toggle button is "off" stop the time and go to the data fragment
+
+                    ResultsFragment fragment = new ResultsFragment();
+
+                    Bundle bundle = new Bundle();
+
+                    bundle.putString("stopTime", "0:" + Minutes + ":" + Seconds);
+
+                    fragment.setArguments(bundle);              //if studying toggle button is "off" stop the time and go to the data fragment
+
+
                     String tag = ResultsFragment.class.getCanonicalName();
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, tag).commit();
                 }
@@ -70,12 +82,13 @@ public class StudyFragment extends Fragment{
         public void run() {
             MillisecondTime = SystemClock.uptimeMillis()-StartTime;
             UpdateTime = TimeBuff + MillisecondTime;
-            seconds = (int) UpdateTime/1000;
-            Minutes = seconds/60;
-            seconds = seconds%60;
+            Seconds = (int) UpdateTime/1000;
+            Minutes = Seconds/60;
+            Seconds = Seconds%60;
             milliSeconds = (int) (UpdateTime%1000);
 
-            TIMER.setText("0:" + Minutes +":"+seconds);
+
+            TIMER.setText("0:" + Minutes +":" + Seconds);
             handler.postDelayed(this, 0);
         }
     };
