@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.ButtonBarLayout;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             // Make this higher or lower according to how much
             // motion you want to detect
             if (mAccel > 3) {
-                // do something
+                Toast.makeText(this, "MOTION DETECTED", Toast.LENGTH_SHORT).show();
             }
         }
     }
