@@ -19,6 +19,7 @@ public class PhoneReceiver extends BroadcastReceiver {
                     .setContentTitle("The Screen is On!")
                     .setContentText("Put down your phone loser!")
                     .setSmallIcon(android.R.drawable.ic_media_play)
+                    .setPriority(Notification.PRIORITY_HIGH)
                     .build();
             mNotificationManger.notify(NOTIFICATION_ID, notification);
         }
