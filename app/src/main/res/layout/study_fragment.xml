@@ -11,8 +11,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="199dp"
         android:checked="false"
-        android:textOff="Start Studying"
-        android:textOn="Stop Studying"
+        android:textOff="@string/start_studying"
+        android:textOn="@string/stop_studying"
         android:textSize="30sp" />
 
     <TextView
