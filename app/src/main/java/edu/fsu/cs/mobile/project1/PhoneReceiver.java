@@ -16,9 +16,9 @@ public class PhoneReceiver extends BroadcastReceiver {
         {
             NotificationManager mNotificationManger = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             Notification notification = new Notification.Builder(context)
-                    .setContentTitle("The Screen is On!")
-                    .setContentText("Put down your phone loser!")
-                    .setSmallIcon(android.R.drawable.ic_media_play)
+                    .setContentTitle("Woah There!")
+                    .setContentText("Put down your phone and keep studying!")
+                    .setSmallIcon(android.R.drawable.ic_dialog_alert)
                     .setPriority(Notification.PRIORITY_HIGH)
                     .build();
             mNotificationManger.notify(NOTIFICATION_ID, notification);
