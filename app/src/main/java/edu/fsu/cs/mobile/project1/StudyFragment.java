@@ -33,9 +33,13 @@ public class StudyFragment extends Fragment{
     TextView GOAL, goaltext;
 
     long startTime;
+    int Seconds, Minutes, milliSeconds;
+    public long Total;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final Intent intent = new Intent(getContext(), ScreenDetectService.class);
+
 
         final View rootView = inflater.inflate(R.layout.study_fragment, container, false);
 
@@ -77,12 +81,24 @@ public class StudyFragment extends Fragment{
                     TIMER.setVisibility(View.VISIBLE);
                     startTimer();
 
+
                     GOAL.setVisibility(View.INVISIBLE);
                     UP.setVisibility(View.INVISIBLE);
                     DOWN.setVisibility(View.INVISIBLE);
                     goaltext.setVisibility(View.INVISIBLE);
                 }else {
+
                     ResultsFragment fragment = new ResultsFragment();       //if studying toggle button is "off" stop the time and go to the data fragment
+
+                    ResultsFragment fragment = new ResultsFragment();
+
+                    Bundle bundle = new Bundle();
+
+                    bundle.putString("stopTime", "0:" + Minutes + ":" + Seconds);
+
+                    fragment.setArguments(bundle);              //if studying toggle button is "off" stop the time and go to the data fragment
+
+
                     String tag = ResultsFragment.class.getCanonicalName();
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, tag).commit();
                 }
