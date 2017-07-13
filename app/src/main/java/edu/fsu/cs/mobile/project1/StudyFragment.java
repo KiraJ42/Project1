@@ -48,8 +48,6 @@ public class StudyFragment extends Fragment{
                     getContext().stopService(intent);       //SERVICE STOPS RUNNING WHEN RESULTS NEED TO BE DISPLAYED
                     ResultsFragment fragment = new ResultsFragment();       //if studying toggle button is "off" stop the time and go to the data fragment
 
-                    ResultsFragment fragment = new ResultsFragment();
-
                     Bundle bundle = new Bundle();
 
                     bundle.putString("stopTime", "0:" + Minutes + ":" + Seconds);
@@ -71,25 +69,4 @@ public class StudyFragment extends Fragment{
         StartTime = SystemClock.uptimeMillis();
         handler.postDelayed(runnable, 0);
     }
-
-    public void stopTimer(){
-        TimeBuff += MillisecondTime;
-        handler.removeCallbacks(runnable);      //stops the timer and displays the most recent time
-    }
-
-    public Runnable runnable = new Runnable() {   //code from: http://www.android-examples.com/android-create-stopwatch-example-tutorial-in-android-studio/
-        @Override
-        public void run() {
-            MillisecondTime = SystemClock.uptimeMillis()-StartTime;
-            UpdateTime = TimeBuff + MillisecondTime;
-            Seconds = (int) UpdateTime/1000;
-            Minutes = Seconds/60;
-            Seconds = Seconds%60;
-            milliSeconds = (int) (UpdateTime%1000);
-
-
-            TIMER.setText("0:" + Minutes +":" + Seconds);
-            handler.postDelayed(this, 0);
-        }
-    };
 }
