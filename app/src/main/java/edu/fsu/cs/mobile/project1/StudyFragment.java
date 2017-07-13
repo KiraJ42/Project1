@@ -1,14 +1,18 @@
 package edu.fsu.cs.mobile.project1;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -20,10 +24,9 @@ public class StudyFragment extends Fragment{
     CountDownTimer COUNT;
     Button UP, DOWN;
     TextView GOAL, goaltext;
-    
-    long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L;
-    Handler handler;
-    int Seconds, Minutes, milliSeconds;
+
+    long startTime;
+    int Seconds, Minutes;
     public long Total;
 
     @Override
@@ -40,8 +43,7 @@ public class StudyFragment extends Fragment{
         DOWN = (Button) rootView.findViewById(R.id.dec);
         TIMER.setVisibility(View.INVISIBLE);
         goaltext = (TextView) rootView.findViewById(R.id.goal_text);
-        
-        handler = new Handler();
+
 
          UP.setOnClickListener(new View.OnClickListener() {
             @Override
