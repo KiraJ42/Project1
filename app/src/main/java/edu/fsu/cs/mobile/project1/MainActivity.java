@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         WelcomeFragment fragment = new WelcomeFragment();       //just open the welcome Fragment, no need to do anything else
         String tag = WelcomeFragment.class.getCanonicalName();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, tag).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, tag).commitAllowingStateLoss();
     }
 
     @Override
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             mAccel = mAccel * 0.9f + delta;
             // Make this higher or lower according to how much
             // motion you want to detect
-            if (mAccel > 3) {
+            if (mAccel > 5) {
                 Toast.makeText(this, "MOTION DETECTED", Toast.LENGTH_SHORT).show();
             }
         }

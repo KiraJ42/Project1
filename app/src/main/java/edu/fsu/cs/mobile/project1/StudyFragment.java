@@ -94,7 +94,7 @@ public class StudyFragment extends Fragment{
 
 
                     String tag = ResultsFragment.class.getCanonicalName();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, tag).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, tag).commitAllowingStateLoss();
                 }
             }
         });
