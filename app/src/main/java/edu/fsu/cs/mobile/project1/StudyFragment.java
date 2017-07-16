@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -49,6 +50,12 @@ public class StudyFragment extends Fragment{
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
+
+                    SharedPreferences.Editor editor = getActivity()
+                            .getSharedPreferences("App", Context.MODE_PRIVATE).edit();
+                    editor.putBoolean("StudyMode", true);
+                    editor.commit();
+
                     if (!MINUTETEXT.getText().toString().isEmpty()){
                         prog = Integer.parseInt(MINUTETEXT.getText().toString().trim());
                     }
@@ -63,6 +70,12 @@ public class StudyFragment extends Fragment{
                     startTimer();
                     getContext().startService(intent);
                 }else {
+
+                    SharedPreferences.Editor editor = getActivity()
+                            .getSharedPreferences("App", Context.MODE_PRIVATE).edit();
+                    editor.putBoolean("StudyMode", false);
+                    editor.commit();
+
                     time = startTime - inMilli; //determine time in Milliseconds
 
                     getContext().stopService(intent);       //SERVICE STOPS RUNNING WHEN RESULTS NEED TO BE DISPLAYED

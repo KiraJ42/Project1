@@ -1,5 +1,8 @@
 package edu.fsu.cs.mobile.project1;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -24,6 +27,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences preferences = getSharedPreferences("App", MODE_PRIVATE);
+        SharedPreferences.Editor editor = getSharedPreferences("App", MODE_PRIVATE).edit();
+        editor.putBoolean("StudyMode", false);
+        editor.commit();
 
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -52,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             mGravity = event.values.clone();
-            // Shake detection
             float x = mGravity[0];
             float y = mGravity[1];
             float z = mGravity[2];
@@ -62,8 +69,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             mAccel = mAccel * 0.9f + delta;
             // Make this higher or lower according to how much
             // motion you want to detect
-            if (mAccel > 5) {
-                Toast.makeText(this, "MOTION DETECTED", Toast.LENGTH_SHORT).show();
+            SharedPreferences preferences = getSharedPreferences("App", MODE_PRIVATE);
+            if (mAccel > 5 && preferences.getBoolean("StudyMode", false)) {
+                NotificationManager manager = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
+                Notification.Builder builder = new Notification.Builder(this);
+
+                builder.setAutoCancel(false);
+                builder.setContentTitle("Hang on!");
+                builder.setContentText("You're not done studying yet!");
+                builder.setSmallIcon(android.R.drawable.ic_dialog_alert);
+                builder.setOngoing(true);
+                builder.setDefaults(Notification.DEFAULT_ALL);
+                builder.setPriority(Notification.PRIORITY_HIGH);
+                builder.build();
+
+                Notification notification = builder.getNotification();
+                manager.notify(1, notification);
+                //Toast.makeText(this, "MOTION DETECTED", Toast.LENGTH_SHORT).show();
             }
         }
     }
