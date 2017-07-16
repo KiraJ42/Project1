@@ -7,11 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class ResultsFragment extends Fragment{
 
     public String timeStop;
+    Button StudyButton;
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
@@ -31,12 +33,21 @@ public class ResultsFragment extends Fragment{
         Bundle bundle = getArguments();
 
         timeStop = bundle.getString("stopTime");
+        StudyButton = (Button) rootView.findViewById(R.id.study);
 
         if (timeStop != null) {
             mTextView.setText("You Studied For \n" + timeStop);
         }
 
 
+        StudyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StudyFragment fragment = new StudyFragment();
+                String tag = StudyFragment.class.getCanonicalName();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, tag).commit();
+            }
+        });
         return rootView;
     }
 

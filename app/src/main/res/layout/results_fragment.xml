@@ -11,11 +11,21 @@
         android:layout_marginTop="182dp"
         android:text="YOU STUDIED FOR: 0:00:00"
         android:textAlignment="center"
-        android:textColor="@android:color/holo_green_dark"
+        android:textColor="@color/colorYellow"
         android:textSize="40sp"
         android:textStyle="bold" />
 
-
+    <Button
+        android:id="@+id/study"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/results"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="87dp"
+        android:background="@color/colorYellow"
+        android:textColor="@color/colorBackground"
+        android:text="Study Again!"
+        android:textSize="18sp" />
 
 
 </RelativeLayout>

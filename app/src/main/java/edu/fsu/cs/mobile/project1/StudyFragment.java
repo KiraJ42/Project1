@@ -12,22 +12,26 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import java.util.concurrent.TimeUnit;
 
 public class StudyFragment extends Fragment{
 
     ToggleButton STUDY;
     TextView TIMER;
     CountDownTimer COUNT;
-    Button UP, DOWN;
-    TextView GOAL, goaltext;
+    ProgressBar BAR;
+    EditText MINUTETEXT;
 
-    long startTime;
-    int Seconds, Minutes;
-    public long Total;
+    long startTime = 60000, inMilli;
+    public long time;
+    int prog;
+    Bundle bundle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,61 +42,39 @@ public class StudyFragment extends Fragment{
 
         STUDY = (ToggleButton) rootView.findViewById(R.id.start_button);
         TIMER = (TextView) rootView.findViewById(R.id.timer);
-        GOAL = (TextView) rootView.findViewById(R.id.goal);
-        UP = (Button) rootView.findViewById(R.id.inc);
-        DOWN = (Button) rootView.findViewById(R.id.dec);
-        TIMER.setVisibility(View.INVISIBLE);
-        goaltext = (TextView) rootView.findViewById(R.id.goal_text);
-
-
-         UP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int value = Integer.parseInt(GOAL.getText().toString());
-                if(value < 60)
-                    value += 1;
-                GOAL.setText(String.valueOf(value));
-            }
-        });
-
-        DOWN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int value = Integer.parseInt(GOAL.getText().toString());
-                if(value > 0)
-                    value -= 1;
-                GOAL.setText(String.valueOf(value));
-            }
-        });
+        BAR = (ProgressBar) rootView.findViewById(R.id.progressCircle);
+        MINUTETEXT = (EditText) rootView.findViewById(R.id.editMinute);
         
         STUDY.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    String text = GOAL.getText().toString();
-                    startTime = ((Long.parseLong(text) * 60)*1000);
+                    if (!MINUTETEXT.getText().toString().isEmpty()){
+                        prog = Integer.parseInt(MINUTETEXT.getText().toString().trim());
+                    }
+                    else {
+                        prog = 1;
+                    }
 
-                    TIMER.setVisibility(View.VISIBLE);
+                    startTime = prog * 60 * 1000;
+                    BAR.setMax((int)startTime / 1000);
+                    BAR.setProgress((int)startTime / 1000);
+                    MINUTETEXT.setEnabled(false);
                     startTimer();
-
-
-                    GOAL.setVisibility(View.INVISIBLE);
-                    UP.setVisibility(View.INVISIBLE);
-                    DOWN.setVisibility(View.INVISIBLE);
-                    goaltext.setVisibility(View.INVISIBLE);
                     getContext().startService(intent);
                 }else {
-                    
+                    time = startTime - inMilli; //determine time in Milliseconds
+
                     getContext().stopService(intent);       //SERVICE STOPS RUNNING WHEN RESULTS NEED TO BE DISPLAYED
                     ResultsFragment fragment = new ResultsFragment();       //if studying toggle button is "off" stop the time and go to the data fragment
 
-                    Bundle bundle = new Bundle();
+                    bundle = new Bundle();
+                    bundle.putString("stopTime", timeFormatter(time));  //bundle for time spent
 
-                    bundle.putString("stopTime", "0:" + Minutes + ":" + Seconds);
 
                     fragment.setArguments(bundle);              //if studying toggle button is "off" stop the time and go to the data fragment
 
-
+                    COUNT.cancel();
                     String tag = ResultsFragment.class.getCanonicalName();
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, tag).commitAllowingStateLoss();
                 }
@@ -107,8 +89,9 @@ public class StudyFragment extends Fragment{
             @Override
             public void onTick(long millisUntilFinished) {
 
-                TIMER.setText(String.valueOf((millisUntilFinished/1000)/60)+":"+String.valueOf((millisUntilFinished/1000)%60));
-
+                inMilli = millisUntilFinished;  //countdown in milliseconds
+                TIMER.setText(timeFormatter(millisUntilFinished));
+                BAR.setProgress((int)(millisUntilFinished / 1000));
             }
 
             @Override
@@ -118,12 +101,12 @@ public class StudyFragment extends Fragment{
                 NotificationManager manage = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
                 Notification.Builder builder = new Notification.Builder(getActivity().getApplicationContext());
 
-                builder.setAutoCancel(false);
+                builder.setAutoCancel(true);
                 builder.setContentTitle("Congratulations");
                 builder.setContentText("You've Reached Your Study Goal!");
                 builder.setSmallIcon(R.drawable.gold_star);
                 builder.setContentIntent(contentIntent);
-                builder.setOngoing(true);
+                builder.setOngoing(false);
                 builder.setDefaults(Notification.DEFAULT_ALL);
                 builder.setPriority(Notification.PRIORITY_HIGH);
                 builder.build();
@@ -131,16 +114,17 @@ public class StudyFragment extends Fragment{
                 Notification note = builder.getNotification();
                 manage.notify(1, note);
 
-                TIMER.setVisibility(View.INVISIBLE);
-
-                GOAL.setVisibility(View.VISIBLE);
-                UP.setVisibility(View.VISIBLE);
-                DOWN.setVisibility(View.VISIBLE);
-                goaltext.setVisibility(View.VISIBLE);
+                inMilli = 0;
 
                 STUDY.setChecked(false);
-
             }
         }.start();
+    }
+
+    private String timeFormatter (long millisecs){
+        return String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(millisecs) -
+                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisecs)),
+                TimeUnit.MILLISECONDS.toSeconds(millisecs) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisecs)));
     }
 }
