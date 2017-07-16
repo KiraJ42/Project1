@@ -104,7 +104,7 @@ public class StudyFragment extends Fragment{
                 builder.setAutoCancel(true);
                 builder.setContentTitle("Congratulations");
                 builder.setContentText("You've Reached Your Study Goal!");
-                builder.setSmallIcon(R.drawable.gold_star);
+                builder.setSmallIcon(R.drawable.icon_star);
                 builder.setContentIntent(contentIntent);
                 builder.setOngoing(false);
                 builder.setDefaults(Notification.DEFAULT_ALL);
