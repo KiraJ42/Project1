@@ -22,10 +22,11 @@
         android:layout_below="@+id/results"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="87dp"
-        android:background="@color/colorYellow"
-        android:textColor="@color/colorBackground"
+        android:background="@drawable/mybutton"
+        android:backgroundTint="@color/colorYellow"
         android:text="Study Again!"
-        android:textSize="18sp" />
+        android:textColor="@color/colorBackground"
+        android:textSize="24sp" />
 
 
 </RelativeLayout>
