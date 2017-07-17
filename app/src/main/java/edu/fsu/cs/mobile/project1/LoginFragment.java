@@ -68,7 +68,7 @@ public class LoginFragment extends Fragment {
 
                     } else {
                         emailEditText.setError("Incorrect or Unregistered Email");
-                        passwordEditText.setError("Incorrect or Unregisted Password");
+                        passwordEditText.setError("Incorrect or Unregistered Password");
                     }
 
                 }
