@@ -15,5 +15,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="review_study_habits">Review Study Habits</string>
+    <string name="study_again">Study Again!</string>
 
 </resources>

@@ -1,6 +1,8 @@
 package edu.fsu.cs.mobile.project1;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,11 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ResultsFragment extends Fragment{
 
     public String timeStop;
     Button StudyButton;
+    Button SignUp;
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
@@ -34,11 +38,16 @@ public class ResultsFragment extends Fragment{
 
         timeStop = bundle.getString("stopTime");
         StudyButton = (Button) rootView.findViewById(R.id.study);
+        SignUp = (Button) rootView.findViewById(R.id.signup);
 
         if (timeStop != null) {
             mTextView.setText("You Studied For \n" + timeStop);
         }
 
+        SharedPreferences preferences = getActivity().getSharedPreferences("App", Context.MODE_PRIVATE);
+        Boolean LoggedIn = preferences.getBoolean("login", false);
+
+        if(!LoggedIn) SignUp.setVisibility(View.VISIBLE);
 
         StudyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +57,16 @@ public class ResultsFragment extends Fragment{
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, tag).commit();
             }
         });
+
+        SignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RegisterFragment fragment = new RegisterFragment();
+                String tag = RegisterFragment.class.getCanonicalName();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, tag).commit();
+            }
+        });
+
         return rootView;
     }
 

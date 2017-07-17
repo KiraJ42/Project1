@@ -24,9 +24,22 @@
         android:layout_marginTop="87dp"
         android:background="@drawable/mybutton"
         android:backgroundTint="@color/colorYellow"
-        android:text="Study Again!"
+        android:text="@string/study_again"
         android:textColor="@color/colorBackground"
         android:textSize="24sp" />
 
+    <Button
+        android:id="@+id/signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/mybutton"
+        android:backgroundTint="@color/colorYellow"
+        android:text="@string/sign_up"
+        android:textColor="@color/colorBackground"
+        android:visibility="gone"
+        android:textSize="24sp"
+        android:layout_below="@+id/study"
+        android:layout_alignStart="@+id/study"
+        android:layout_marginTop="11dp" />
 
 </RelativeLayout>
