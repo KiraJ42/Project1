@@ -3,6 +3,20 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <TextView
+        android:textColor="@color/colorWhite"
+        android:id="@+id/total_time"
+        android:textSize="30sp"
+        android:text="Total Time: 0:00:00"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="175dp"
+        android:layout_above="@+id/study"
+        android:layout_alignEnd="@+id/study"
+        android:layout_alignStart="@+id/study"
+        android:gravity="center"/>
+
+
+    <TextView
         android:id="@+id/results"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
