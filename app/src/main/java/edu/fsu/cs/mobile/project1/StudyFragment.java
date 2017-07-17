@@ -9,14 +9,20 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.concurrent.TimeUnit;
@@ -34,6 +40,64 @@ public class StudyFragment extends Fragment{
     int prog;
     Bundle bundle;
 
+    private int menuLoginId = 0;
+    private int menuLogoutId = 1;
+    private int menuRegisterId = 2;
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        SharedPreferences preferences = getActivity().getSharedPreferences("App", Context.MODE_PRIVATE);
+        Boolean loggedIn = preferences.getBoolean("login", false);
+
+        MenuItem logout, login, register;
+
+        if (loggedIn == true) {
+            logout = menu.add(R.string.logout);
+            menuLogoutId = logout.getItemId();
+            logout.setIcon(R.drawable.icon_stop);
+        } else {
+            register = menu.add(R.string.register);
+            login = menu.add(R.string.login);
+            menuLoginId = login.getItemId();
+            menuRegisterId = register.getItemId();
+            register.setIcon(R.drawable.icon_star);
+            login.setIcon(R.drawable.icon_start);
+        }
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences("App", Context.MODE_PRIVATE).edit();
+
+        if (menuLoginId == item.getItemId()){
+            LoginFragment fragment = new LoginFragment();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment).addToBackStack("login").commit();
+        }
+
+        if (menuLogoutId == item.getItemId()) {
+            editor.remove("login");
+            editor.commit();
+            Toast.makeText(getActivity(), "Logged Out", Toast.LENGTH_SHORT).show();
+        }
+
+        if (menuRegisterId == item.getItemId()) {
+            RegisterFragment fragment = new RegisterFragment();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment).disallowAddToBackStack().commit();
+        }
+
+        return false;
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final Intent intent = new Intent(getContext(), ScreenDetectService.class);
@@ -45,7 +109,7 @@ public class StudyFragment extends Fragment{
         TIMER = (TextView) rootView.findViewById(R.id.timer);
         BAR = (ProgressBar) rootView.findViewById(R.id.progressCircle);
         MINUTETEXT = (EditText) rootView.findViewById(R.id.editMinute);
-        
+
         STUDY.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -89,7 +153,7 @@ public class StudyFragment extends Fragment{
 
                     COUNT.cancel();
                     String tag = ResultsFragment.class.getCanonicalName();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, tag).commitAllowingStateLoss();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, tag).addToBackStack("results").commitAllowingStateLoss();
                 }
             }
         });
@@ -98,7 +162,7 @@ public class StudyFragment extends Fragment{
     }
 
     public void startTimer(){
-         COUNT = new CountDownTimer(startTime, 1000) {
+        COUNT = new CountDownTimer(startTime, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -136,7 +200,7 @@ public class StudyFragment extends Fragment{
 
     private String timeFormatter (long millisecs){
         return String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(millisecs) -
-                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisecs)),
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisecs)),
                 TimeUnit.MILLISECONDS.toSeconds(millisecs) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisecs)));
     }
