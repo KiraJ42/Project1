@@ -39,6 +39,7 @@ public class StudyFragment extends Fragment{
     public long time;
     int prog;
     Bundle bundle;
+    private long currentTime;
 
     private int menuLoginId = 0;
     private int menuLogoutId = 1;
@@ -84,6 +85,7 @@ public class StudyFragment extends Fragment{
         }
 
         if (menuLogoutId == item.getItemId()) {
+            editor.remove("time");
             editor.remove("login");
             editor.commit();
             Toast.makeText(getActivity(), "Logged Out", Toast.LENGTH_SHORT).show();
@@ -99,7 +101,7 @@ public class StudyFragment extends Fragment{
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         final Intent intent = new Intent(getContext(), ScreenDetectService.class);
 
 
@@ -148,6 +150,28 @@ public class StudyFragment extends Fragment{
                     bundle = new Bundle();
                     bundle.putString("stopTime", timeFormatter(time));  //bundle for time spent
 
+                    SharedPreferences preferences = getActivity().getSharedPreferences("App", Context.MODE_PRIVATE);
+                    Boolean isLoggedIn = preferences.getBoolean("login", false);
+
+                    currentTime = preferences.getLong("time",0);
+
+                    if (time != currentTime && isLoggedIn) {
+                        time += currentTime;
+                    }
+
+                    editor.putLong("time", time);
+                    editor.commit();
+
+                    /*
+                    currentTime = preferences.getLong("time", 0);   //
+
+
+                    if (time != currentTime && isLoggedIn) {
+                        time += currentTime;
+                    }
+
+                    editor.putLong("time", time + currentTime);
+                    */
 
                     fragment.setArguments(bundle);              //if studying toggle button is "off" stop the time and go to the data fragment
 

@@ -13,11 +13,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.concurrent.TimeUnit;
+
 public class ResultsFragment extends Fragment{
 
     public String timeStop;
     Button StudyButton;
     Button SignUp;
+    private TextView totalTime;
+    private long time;
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
@@ -47,6 +51,17 @@ public class ResultsFragment extends Fragment{
         SharedPreferences preferences = getActivity().getSharedPreferences("App", Context.MODE_PRIVATE);
         Boolean LoggedIn = preferences.getBoolean("login", false);
 
+        totalTime = (TextView) rootView.findViewById(R.id.total_time);
+
+        time = preferences.getLong("time", 0);
+        totalTime.setText("Total Time: " + timeFormatter(time));
+
+        if (LoggedIn) {
+            totalTime.setVisibility(View.VISIBLE);
+        } else {
+            totalTime.setVisibility(View.INVISIBLE);
+        }
+
         if(!LoggedIn) SignUp.setVisibility(View.VISIBLE);
 
         StudyButton.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +83,14 @@ public class ResultsFragment extends Fragment{
         });
 
         return rootView;
+    }
+
+
+    private String timeFormatter (long millisecs){
+        return String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(millisecs) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisecs)),
+                TimeUnit.MILLISECONDS.toSeconds(millisecs) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisecs)));
     }
 
 }
