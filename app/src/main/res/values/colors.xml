@@ -8,4 +8,5 @@
     <color name="Accent">#F5FA55</color>
     <color name="colorBackground">#151B29</color>
     <color name="colorYellow">#F5FA55</color>
+    <color name="colorWhite">#ffffff</color>
 </resources>

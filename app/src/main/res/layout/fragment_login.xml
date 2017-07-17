@@ -1,0 +1,46 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:id="@+id/fragment_login"
+             tools:context="edu.fsu.cs.mobile.project1.LoginFragment">
+
+
+    <RelativeLayout
+        android:background="@color/colorWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:inputType="textEmailAddress"
+            android:id="@+id/editText_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"/>
+
+
+        <EditText
+            android:inputType="textPassword"
+            android:id="@+id/editText_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:layout_below="@+id/editText_email"
+            android:layout_alignParentStart="true"/>
+
+
+        <Button
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:background="@drawable/mybutton"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/button_login"
+            android:text="@string/login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editText_password"
+            android:layout_alignParentStart="true"/>
+
+    </RelativeLayout>
+
+</FrameLayout>

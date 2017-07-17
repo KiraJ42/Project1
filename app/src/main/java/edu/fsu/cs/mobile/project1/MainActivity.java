@@ -9,12 +9,17 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
-    Button guestButton;
+    static final String PREF_USER_NAME = "username";
+    static final String PREF_PASSWORD = "password";
+    static final String PREF_LOGIN = "login";
+    static final Boolean VALID_LOGIN = false;
+
     private SensorManager sensorManager;
     private Sensor accelerometer;
 
@@ -22,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private float mAccel;
     private float mAccelCurrent;
     private float mAccelLast;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +45,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
 
-        WelcomeFragment fragment = new WelcomeFragment();       //just open the welcome Fragment, no need to do anything else
-        String tag = WelcomeFragment.class.getCanonicalName();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, tag).commitAllowingStateLoss();
+        String email = preferences.getString(PREF_USER_NAME, PREF_LOGIN);
+        String password = preferences.getString(PREF_PASSWORD, PREF_PASSWORD);
+        Boolean loggedIn = preferences.getBoolean(PREF_LOGIN, VALID_LOGIN);
+
+        if (loggedIn) {
+            StudyFragment studyFragment = new StudyFragment();
+            String tag = StudyFragment.class.getCanonicalName();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame,studyFragment,tag).commitAllowingStateLoss();
+        } else {
+            WelcomeFragment fragment = new WelcomeFragment();       //just open the welcome Fragment, no need to do anything else
+            String tag = WelcomeFragment.class.getCanonicalName();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment, tag).commitAllowingStateLoss();
+        }
     }
 
     @Override
